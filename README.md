@@ -140,7 +140,7 @@ Found on the Internet - All in One List.
 
 ### Iptables Rules
 
-#### Saving Rules
+#### 保存规则 save rules
 
 ###### Debian Based
 
@@ -154,62 +154,82 @@ netfilter-persistent save
 service iptables save
 ```
 
-#### List out all of the active iptables rules with verbose
+#### 列出所有规则（verbose）
+
+List out all of the active iptables rules with verbose
 
 ```bash
 iptables -n -L -v
 ```
 
-#### List out all of the active iptables rules with numeric lines and verbose
+#### 列出所有规则，带行号 
+
+List out all of the active iptables rules with numeric lines and verbose
 
 ```bash
 iptables -n -L -v --line-numbers
 ```
 
-#### Print out all of the active iptables rules
+#### 输出所有active规则
+
+Print out all of the active iptables rules
 
 ```bash
 iptables -S
 ```
 
-#### List Rules as Tables for INPUT chain
+#### 列出所有 INPUT chain 规则（表格形式）
+
+List Rules as Tables for INPUT chain
 
 ```bash
 iptables -L INPUT
 ```
 
-#### Print all of the rule specifications in the INPUT chain
+#### 列出 INPUT chain 详情
+
+Print all of the rule specifications in the INPUT chain
 
 ```bash
 iptables -S INPUT
 ```
 
-#### Show Packet Counts and Aggregate Size
+#### 输出packet个数 大小
+
+Show Packet Counts and Aggregate Size
 
 ```bash
 iptables -L INPUT -v
 ```
 
-#### To display INPUT or OUTPUT chain rules with numeric lines and verbose
+####  列出 INPUT，OUTPUT 规则，带行号
+
+To display INPUT or OUTPUT chain rules with numeric lines and verbose
 
 ```bash
 iptables -L INPUT -n -v
 iptables -L OUTPUT -n -v --line-numbers
 ```
 
-#### Delete Rule by Chain and Number
+####  删除规则（通过行号）
+
+Delete Rule by Chain and Number
 
 ```bash
 iptables -D INPUT 10
 ```
 
-#### Delete Rule by Specification
+####  删除规则（同归详情）
+
+Delete Rule by Specification
 
 ```bash
 iptables -D INPUT -m conntrack --ctstate INVALID -j DROP
 ```
 
-#### Flush All Rules, Delete All Chains, and Accept All
+####  清空所有规则（！）
+
+Flush All Rules, Delete All Chains, and Accept All
 
 ```bash
 iptables -P INPUT ACCEPT
@@ -222,199 +242,260 @@ iptables -F
 iptables -X
 ```
 
-#### Flush All Chains
+####  清空所有chains
+
+Flush All Chains
 
 ```bash
 iptables -F
 ```
 
-#### Flush a Single Chain
+####  清空单个chain
+
+Flush a Single Chain
 
 ```bash
 iptables -F INPUT
 ```
 
-#### Insert Firewall Rules
+####  加入一条规则
+
+Insert Firewall Rules
 
 ```bash
 iptables -I INPUT 2 -s 202.54.1.2 -j DROP
 ```
 
-#### Allow Loopback Connections
+####  允许 loopback 连接
+
+Allow Loopback Connections
 
 ```bash
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 ```
 
-#### Allow Established and Related Incoming Connections
+####  允许 Established and Related Incoming Connections 
+
+Allow Established and Related Incoming Connections
 
 ```bash
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 ```
 
-#### Allow Established Outgoing Connections
+####  允许 Established Outgoing Connections
+
+Allow Established Outgoing Connections
 
 ```bash
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Internal to External
+####  把eth1 的流量转到 eth0
+
+Internal to External
 
 ```bash
 iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
 ```
 
-#### Drop Invalid Packets
+#### 丢掉 Invalid Packets
+
+
+Drop Invalid Packets
 
 ```bash
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 ```
 
-#### Block an IP Address
+####  丢弃某个ip的流量
+
+Block an IP Address
 
 ```bash
 iptables -A INPUT -s 192.168.252.10 -j DROP
 ```
 
-#### Block and IP Address and Reject
+####  reject某个ip（reject 和drop的不同，reject会发rst包，drop只能等超时了）
+
+Block and IP Address and Reject
 
 ```bash
 iptables -A INPUT -s 192.168.252.10 -j REJECT
 ```
 
-#### Block Connections to a Network Interface
+####  丢掉一个网卡所有流量 
+
+Block Connections to a Network Interface
 
 ```bash
 iptables -A INPUT -i eth0 -s 192.168.252.10 -j DROP
 ```
 
-#### Allow All Incoming SSH
+####  允许所有的ssh端口（22端口）
+
+Allow All Incoming SSH
 
 ```bash
 iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow Incoming SSH from Specific IP address or subnet
+#### 允许来自某个ip或者子网的 Incoming SSH 连接
+
+Allow Incoming SSH from Specific IP address or subnet
 
 ```bash
 iptables -A INPUT -p tcp -s 192.168.240.0/24 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow Outgoing SSH
+#### 放行ssh出方向
+
+Allow Outgoing SSH
 
 ```bash
 iptables -A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A INPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow Incoming Rsync from Specific IP Address or Subnet
+####   允许来自某个ip或者子网的 rsync 端口
+
+Allow Incoming Rsync from Specific IP Address or Subnet
 
 ```bash
 iptables -A INPUT -p tcp -s 192.168.240.0/24 --dport 873 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 873 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming HTTP
+#### 放行所有80端口入方向
+
+Allow All Incoming HTTP
 
 ```bash
 iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming HTTPS
+#### 放行所有https
+
+Allow All Incoming HTTPS
 
 ```bash
 iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming HTTP and HTTPS
+#### 放行80 和 443
+
+Allow All Incoming HTTP and HTTPS
 
 ```bash
 iptables -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow MySQL from Specific IP Address or Subnet
+#### 放行 mysql 3306
+
+Allow MySQL from Specific IP Address or Subnet
 
 ```bash
 iptables -A INPUT -p tcp -s 192.168.240.0/24 --dport 3306 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 3306 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow MySQL to Specific Network Interface
+#### 放行 eth1的mysql
+
+Allow MySQL to Specific Network Interface
 
 ```bash
 iptables -A INPUT -i eth1 -p tcp --dport 3306 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth1 -p tcp --sport 3306 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### PostgreSQL from Specific IP Address or Subnet
+#### 放行PostgreSQL 
+
+PostgreSQL from Specific IP Address or Subnet
 
 ```bash
 iptables -A INPUT -p tcp -s 192.168.240.0/24 --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow PostgreSQL to Specific Network Interface
+####  放行 eth1的PostgreSQL
+
+Allow PostgreSQL to Specific Network Interface
 
 ```bash
 iptables -A INPUT -i eth1 -p tcp --dport 5432 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth1 -p tcp --sport 5432 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Block Outgoing SMTP Mail
+#### block 25端口出
+
+Block Outgoing SMTP Mail
 
 ```bash
 iptables -A OUTPUT -p tcp --dport 25 -j REJECT
 ```
 
-#### Allow All Incoming SMTP
+####  放行25端口 入
+
+Allow All Incoming SMTP
 
 ```bash
 iptables -A INPUT -p tcp --dport 25 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 25 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming IMAP
+#### 放行所有的IMAP
+
+Allow All Incoming IMAP
 
 ```bash
 iptables -A INPUT -p tcp --dport 143 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 143 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming IMAPS
+#### 放行所有的IAMPS
+
+Allow All Incoming IMAPS
 
 ```bash
 iptables -A INPUT -p tcp --dport 993 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 993 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming POP3
+#### 放行所有的pop3
+
+Allow All Incoming POP3
 
 ```bash
 iptables -A INPUT -p tcp --dport 110 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 110 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Allow All Incoming POP3S
+####  放行所有的pop3s
+
+Allow All Incoming POP3S
 
 ```bash
 iptables -A INPUT -p tcp --dport 995 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -p tcp --sport 995 -m conntrack --ctstate ESTABLISHED -j ACCEPT
 ```
 
-#### Drop Private Network Address On Public Interface
+####  丢掉所有在外网网卡上出现的私有网流量（不应该出现）
+
+Drop Private Network Address On Public Interface
 
 ```bash
 iptables -A INPUT -i eth1 -s 192.168.0.0/24 -j DROP
 iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
 ```
 
-#### Drop All Outgoing to Facebook Networks
+#### 丢掉所有的出防线 facebook 流量（基于域名）
+
+Drop All Outgoing to Facebook Networks
 
 Get Facebook AS:
 
@@ -432,7 +513,9 @@ for i in $(whois -h whois.radb.net -- '-i origin AS32934' | grep "^route:" | cut
 done
 ```
 
-#### Log and Drop Packets
+#### 对丢包的流量打log审计
+
+Log and Drop Packets
 
 ```bash
 iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix "IP_SPOOF A: "
@@ -446,34 +529,44 @@ tail -f /var/log/messages
 grep --color 'IP SPOOF' /var/log/messages
 ```
 
-#### Log and Drop Packets with Limited Number of Log Entries
+#### 对丢包审计，限制日志大小
+
+Log and Drop Packets with Limited Number of Log Entries
 
 ```bash
 iptables -A INPUT -i eth1 -s 10.0.0.0/8 -m limit --limit 5/m --limit-burst 7 -j LOG --log-prefix "IP_SPOOF A: "
 iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
 ```
 
-#### Drop or Accept Traffic From Mac Address
+####  针对mac地址的放行、丢包策略
+
+Drop or Accept Traffic From Mac Address
 
 ```bash
 iptables -A INPUT -m mac --mac-source 00:0F:EA:91:04:08 -j DROP
 iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:0F:EA:91:04:07 -j ACCEPT
 ```
 
-#### Block or Allow ICMP Ping Request
+####  针对icmp协议的放行、丢包策略
+
+Block or Allow ICMP Ping Request
 
 ```bash
 iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
 iptables -A INPUT -i eth1 -p icmp --icmp-type echo-request -j DROP
 ```
 
-#### Specifying Multiple Ports with `multiport`
+#### 一次处理多个ports
+
+Specifying Multiple Ports with `multiport`
 
 ```bash
 iptables -A INPUT -i eth0 -p tcp -m state --state NEW -m multiport --dports ssh,smtp,http,https -j ACCEPT
 ```
 
-#### Load Balancing with `random*` or `nth*`
+####  使用random 或者 nth* 进行负载均衡策略
+
+Load Balancing with `random*` or `nth*`
 
 ```bash
 _ips=("172.31.250.10" "172.31.250.11" "172.31.250.12" "172.31.250.13")
@@ -495,7 +588,9 @@ for ip in "${_ips[@]}" ; do
 done
 ```
 
-#### Restricting the Number of Connections with `limit` and `iplimit*`
+#### 限制连接数
+
+Restricting the Number of Connections with `limit` and `iplimit*`
 
 ```bash
 iptables -A FORWARD -m state --state NEW -p tcp -m multiport --dport http,https -o eth0 -i eth1 \
@@ -510,19 +605,25 @@ iptables -A INPUT -p tcp -m state --state NEW --dport http -m iplimit --iplimit-
 
 #### Maintaining a List of recent Connections to Match Against
 
+
+
 ```bash
 iptables -A FORWARD -m recent --name portscan --rcheck --seconds 100 -j DROP
 iptables -A FORWARD -p tcp -i eth0 --dport 443 -m recent --name portscan --set -j DROP
 ```
 
-#### Matching Against a `string*` in a Packet's Data Payload
+####  Matching Against a `string*` in a Packet's Data Payload
+
+
 
 ```bash
 iptables -A FORWARD -m string --string '.com' -j DROP
 iptables -A FORWARD -m string --string '.exe' -j DROP
 ```
 
-#### Time-based Rules with `time*`
+####  基于时间规则 
+
+Time-based Rules with `time*`
 
 ```bash
 iptables -A FORWARD -p tcp -m multiport --dport http,https -o eth0 -i eth1 \
@@ -535,7 +636,9 @@ iptables -A FORWARD -p tcp -m multiport --dport http,https -o eth0 -i eth1 \
 iptables -A INPUT -s 1.2.3.4 -m ttl --ttl-lt 40 -j REJECT
 ```
 
-#### Protection against port scanning
+#### 防止有人在烧端口
+
+Protection against port scanning
 
 ```bash
 iptables -N port-scanning
@@ -543,14 +646,18 @@ iptables -A port-scanning -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limi
 iptables -A port-scanning -j DROP
 ```
 
-#### SSH brute-force protection
+#### ssh防暴力破解
+
+SSH brute-force protection
 
 ```bash
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --set
 iptables -A INPUT -p tcp --dport ssh -m conntrack --ctstate NEW -m recent --update --seconds 60 --hitcount 10 -j DROP
 ```
 
-#### Syn-flood protection
+#### 防止 syn flood 攻击
+
+Syn-flood protection
 
 ```bash
 iptables -N syn_flood
@@ -575,7 +682,9 @@ iptables -A INPUT -p tcp -m tcp -m conntrack --ctstate INVALID,UNTRACKED -j SYNP
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 ```
 
-#### Block New Packets That Are Not SYN
+#### 干掉不是通过syn包建立的tcp
+
+Block New Packets That Are Not SYN
 
 ```bash
 iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
