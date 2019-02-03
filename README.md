@@ -1,5 +1,8 @@
 <h2 align="center">Iptables Essentials: Common Firewall Rules and Commands</h2>
 
+中文翻译，iptables 命令使用指南，by example 的 cheatsheet。
+
+
 <br>
 
 <p align="center">
@@ -219,7 +222,7 @@ Delete Rule by Chain and Number
 iptables -D INPUT 10
 ```
 
-####  删除规则（同归详情）
+####  删除规则（通过详情）
 
 Delete Rule by Specification
 
