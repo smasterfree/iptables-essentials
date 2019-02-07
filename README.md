@@ -143,7 +143,9 @@ Found on the Internet - All in One List.
 
 ### Iptables Rules
 
-#### 保存规则 save rules
+#### 保存规则 
+
+save rules
 
 ###### Debian Based
 
@@ -173,7 +175,7 @@ List out all of the active iptables rules with numeric lines and verbose
 iptables -n -L -v --line-numbers
 ```
 
-#### 输出所有active规则
+#### 列出所有active规则
 
 Print out all of the active iptables rules
 
@@ -197,7 +199,7 @@ Print all of the rule specifications in the INPUT chain
 iptables -S INPUT
 ```
 
-#### 输出packet个数 大小
+#### 列出packet个数，大小等信息
 
 Show Packet Counts and Aggregate Size
 
@@ -496,7 +498,7 @@ iptables -A INPUT -i eth1 -s 192.168.0.0/24 -j DROP
 iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
 ```
 
-#### 丢掉所有的出防线 facebook 流量（基于域名）
+#### 丢掉所有的出方向 facebook 流量（基于域名）
 
 Drop All Outgoing to Facebook Networks
 
